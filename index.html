@@ -1,10 +1,3 @@
-import os, zipfile, textwrap
-
-base = "/mnt/data/love_site"
-os.makedirs(base, exist_ok=True)
-os.makedirs(os.path.join(base, "photos"), exist_ok=True)
-
-index_html = r'''<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -348,24 +341,3 @@ index_html = r'''<!DOCTYPE html>
   </script>
 </body>
 </html>
-
-with open(os.path.join(base, "index.html"), "w", encoding="utf-8") as f:
-    f.write(index_html)
-with open(os.path.join(base, "README.md"), "w", encoding="utf-8") as f:
-    f.write(readme)
-# Keep photos folder in zip with placeholder note; actual photo placeholders are intentionally not fake images.
-with open(os.path.join(base, "photos", "ПОЛОЖИ_СЮДА_ФОТО.txt"), "w", encoding="utf-8") as f:
-    f.write("Добавь сюда фотографии и назови их memory-1.jpg, memory-2.jpg, memory-3.jpg. См. README.md.\n")
-
-zip_path = "/mnt/data/love_site_github_pages.zip"
-with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
-    for root, dirs, files in os.walk(base):
-        for name in files:
-            full = os.path.join(root, name)
-            arc = os.path.relpath(full, os.path.dirname(base))
-            z.write(full, arc)
-
-print("Готово:")
-print(zip_path)
-print(os.path.join(base, "index.html"))
-print(os.path.join(base, "README.md"))
